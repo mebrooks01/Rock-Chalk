@@ -1,6 +1,7 @@
 const Discord = require('discord.js')
 const client = new Discord.Client()
 const config = require('./config.json')
+const grades = require('./grade.json')
 const uwuifier = require('uwuify')
 const uwuify = new uwuifier()
 const prefix = config.prefix
@@ -111,7 +112,7 @@ client.on('message', message => {
 
   if (command === 'eval' && message.author.id == '496463728661889026') {
     try {
-      const code = args.join(' ')
+      const code = message.content.slice(command.length + 1)
       let evaled = eval(code)
 
       if (typeof evaled !== 'string') evaled = require('util').inspect(evaled)
@@ -124,9 +125,7 @@ client.on('message', message => {
 
   if (command === 'ping') {
     message.channel.send(
-      `🏓Latency is ${message.createdTimestamp - message.createdTimestamp}ms. API Latency is ${Math.round(
-        client.ws.ping
-      )}ms`
+      `🏓Latency is ${Date.now() - message.createdTimestamp} ms. API Latency is ${Math.round(client.ws.ping)}ms`
     )
   }
 
@@ -136,6 +135,25 @@ client.on('message', message => {
 
     let UWU = uwuify.uwuify(toUWU)
     message.channel.send(UWU, { allowedMentions: { parse: [] } })
+  }
+
+  if (command === 'grade' || command === 'convert') {
+    if (args[0] == 'sport' || args[0] == 'rope' || args[0] == 'trad') {
+      grades.sport.forEach(grade => {
+        if (grade.includes(args[1])) {
+          return message.reply(`Grade Conversion\n\`YDS\`: ${grade[0]}\n\`Sport FR\`: ${grade[1]}`)
+        }
+      })
+      return
+    }
+    if (args[0] == 'boulder' || args[0] == 'bouldering') {
+      grades.boulder.forEach(grade => {
+        if (grade.includes(args[1])) {
+          return message.reply(`Grade Conversion\n\`Hueco\`: ${grade[0]}\n\`Bouldering FR\`: ${grade[1]}`)
+        }
+      })
+      return
+    }
   }
 })
 
