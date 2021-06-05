@@ -85,6 +85,7 @@ const clean = text => {
     return text.replace(/`/g, '`' + String.fromCharCode(8203)).replace(/@/g, '@' + String.fromCharCode(8203))
   else return text
 }
+
 client.on('message', message => {
   if (message.author.bot) return
   msg = message.content.toLowerCase()
@@ -155,6 +156,14 @@ client.on('message', message => {
       return
     }
   }
+})
+
+client.on('guildMemberAdd', member => {
+  client.channels.cache
+    .get('691139367900807251')
+    .send(
+      `Welcome to Rock & Chalk <@${member.id}>.\nGo introduce yourself in <#724633040847896788> and can get yourself roles in <#840082182550192169>\nIf you have questions just ask. :)`
+    )
 })
 
 client.login(config.token)
